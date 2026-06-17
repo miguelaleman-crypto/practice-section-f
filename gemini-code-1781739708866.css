@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 2px solid #eef2f5;
+    padding-bottom: 15px;
+}
+
+.logo {
+    background-color: #4A90E2;
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.logo.check {
+    background-color: #2ECC71;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+.instructions-box, .quiz-box, .results-box {
+    color: #555;
+    line-height: 1.6;
+}
+
+.example-box {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-left: 4px solid #4A90E2;
+    margin-top: 15px;
+    border-radius: 4px;
+}
+
+.sentence {
+    font-size: 20px;
+    font-weight: 500;
+    color: #222;
+    margin: 20px 0;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #4A90E2;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.timer {
+    font-size: 18px;
+    font-weight: bold;
+    color: #E74C3C;
+}
+
+.btn {
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background-color: #357ABD;
+}
+
+.summary-item {
+    background: #f9f9f9;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border-left: 5px solid #ccc;
+}
+.summary-item.correct { border-left-color: #2ECC71; }
+.summary-item.incorrect { border-left-color: #E74C3C; }
