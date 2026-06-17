@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versant Section F: Sentence Completion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .versant-card {
+            max-width: 800px;
+            min-height: 500px;
+            background: white;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .header-blue {
+            color: #1e3a8a;
+            border-bottom: 2px solid #1e3a8a;
+        }
+
+        .instruction-box {
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-area {
+            border: 1px solid #94a3b8;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .input-blank {
+            border: 1px solid #60a5fa;
+            border-radius: 4px;
+            padding: 2px 8px;
+            width: 120px;
+            outline: none;
+            color: #1e40af;
+            font-weight: 500;
+        }
+
+        .timer-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .timer-progress {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #10b981;
+            bottom: -10px;
+            transition: width 1s linear;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div id="app" class="versant-card w-full flex flex-col">
+        <!-- Start Screen -->
+        <div id="start-screen" class="p-8 flex flex-col h-full items-center justify-center text-center">
+            <div class="w-full flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-slate-700 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold">F</span>
+                    <h1 class="text-2xl font-bold header-blue">Sentence Completion</h1>
+                </div>
+                <span class="text-gray-500 font-bold">Instructions</span>
+            </div>
+            
+            <div class="instruction-box p-6 w-full text-left mb-8">
+                <p class="text-gray-700 leading-relaxed">
+                    Please type one word that best fits the meaning of the sentence. Type only one word. 
+                    You will have 25 seconds for each sentence. Click "Next" when you are finished.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 w-full mb-8">
+                <div class="bg-zinc-700 text-white p-10 rounded flex items-center justify-center relative">
+                    <p class="italic text-lg">It's ________ tonight. Bring your sweater.</p>
+                    <div class="absolute bottom-2 right-2 opacity-50">👁️</div>
+                </div>
+                <div class="bg-blue-900 text-white p-10 rounded flex items-center justify-center relative">
+                    <p class="italic text-xl font-light">cold</p>
+                    <div class="absolute bottom-2 right-2 opacity-50">⌨️</div>
+                </div>
+            </div>
+
+            <button onclick="startTest()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold transition">
+                Begin Test
+            </button>
+        </div>
+
+        <!-- Test Screen -->
+        <div id="test-screen" class="hidden p-8 flex flex-col h-full flex-1">
+            <div class="w-full flex justify-between items-center mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="bg-slate-700 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">F</span>
+                    <h1 class="text-xl font-bold header-blue">Sentence Completion</h1>
+                </div>
+                <span id="progress-text" class="text-gray-500 font-bold">1 / 20</span>
+            </div>
+
+            <h2 class="text-blue-800 font-bold mb-4">Complete the sentence.</h2>
+            
+            <div class="question-area mb-8">
+                <p id="sentence-display" class="text-xl text-gray-700 leading-loose text-center">
+                    <!-- Sentence injected here -->
+                </p>
+            </div>
+
+            <div class="mt-auto flex justify-between items-end">
+                <div class="flex flex-col items-start gap-2">
+                    <div class="w-48 h-2 bg-gray-200 rounded relative overflow-hidden">
+                        <div id="timer-bar" class="timer-progress" style="width: 100%;"></div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="timer-circle" id="timer-display">25"</div>
+                    </div>
+                </div>
+
+                <button id="next-btn" onclick="nextQuestion()" class="flex items-center gap-2 text-blue-600 font-bold text-lg hover:text-blue-800 transition">
+                    Next <span class="border-2 border-blue-600 rounded-full w-8 h-8 flex items-center justify-center">→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Feedback Screen -->
+        <div id="feedback-screen" class="hidden p-8 overflow-y-auto h-[600px]">
+            <h1 class="text-2xl font-bold header-blue mb-4">Test Results & Feedback</h1>
+            <div id="score-summary" class="bg-blue-50 p-4 rounded mb-6 text-blue-900 font-bold text-lg">
+                <!-- Score summary -->
+            </div>
+            <div id="results-list" class="space-y-4">
+                <!-- Results injected here -->
+            </div>
+            <button onclick="location.reload()" class="mt-8 bg-slate-700 text-white px-6 py-2 rounded font-bold">Restart Test</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 1, text: "It is very [blank] today, so I am wearing a heavy coat.", answer: "cold" },
+            { id: 2, text: "Please turn off the [blank] before you leave the room to save energy.", answer: "light" },
+            { id: 3, text: "I need to buy some [blank] at the bakery to make a sandwich.", answer: "bread" },
+            { id: 4, text: "The cat is sleeping [blank] the sofa in the living room.", answer: "on" },
+            { id: 5, text: "She [blank] to the gym every morning before work.", answer: "goes" },
+            { id: 6, text: "He was late for the meeting because he [blank] his bus.", answer: "missed" },
+            { id: 7, text: "Could you please [blank] the door? It is getting quite noisy outside.", answer: "close" },
+            { id: 8, text: "I haven't seen my brother [blank] last Christmas.", answer: "since" },
+            { id: 9, text: "It's a beautiful day, so we decided to go for a [blank] in the park.", answer: "walk" },
+            { id: 10, text: "The project deadline was [blank] until next Friday.", answer: "postponed" },
+            { id: 11, text: "She is looking for a new [blank] as a graphic designer.", answer: "job" },
+            { id: 12, text: "The company's profits have [blank] significantly since last year.", answer: "increased" },
+            { id: 13, text: "It is essential to [blank] all the safety regulations in the lab.", answer: "follow" },
+            { id: 14, text: "He managed to solve the problem [blank] the lack of resources.", answer: "despite" },
+            { id: 15, text: "The new software is [blank] with older operating systems.", answer: "compatible" },
+            { id: 16, text: "We need to [blank] a solution to this technical issue immediately.", answer: "find" },
+            { id: 17, text: "Her contribution to the research team was [blank] to our success.", answer: "crucial" },
+            { id: 18, text: "The scientist's findings were [blank] by several independent studies.", answer: "confirmed" },
+            { id: 19, text: "The contract contains several [blank] that we need to review carefully.", answer: "clauses" },
+            { id: 20, text: "Despite the initial setbacks, the launch was [blank] successful.", answer: "ultimately" }
+        ];
+
+        let currentIndex = 0;
+        let userAnswers = [];
+        let timerSeconds = 25;
+        let timerInterval;
+
+        function startTest() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIndex >= questions.length) {
+                showFeedback();
+                return;
+            }
+
+            const q = questions[currentIndex];
+            const display = document.getElementById('sentence-display');
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} / ${questions.length}`;
+            
+            // Create sentence with input
+            const parts = q.text.split('[blank]');
+            display.innerHTML = `${parts[0]} <input type="text" id="answer-input" class="input-blank" autocomplete="off"> ${parts[1]}`;
+            
+            const input = document.getElementById('answer-input');
+            input.focus();
+            
+            // Enter key listener
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') nextQuestion();
+            });
+
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerSeconds = 25;
+            updateTimerUI();
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerUI();
+                if (timerSeconds <= 0) {
+                    nextQuestion();
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            document.getElementById('timer-display').innerText = `${timerSeconds < 10 ? '0' + timerSeconds : timerSeconds}"`;
+            const percentage = (timerSeconds / 25) * 100;
+            document.getElementById('timer-bar').style.width = `${percentage}%`;
+            
+            // Color change for warning
+            if (timerSeconds <= 5) {
+                document.getElementById('timer-bar').style.background = '#ef4444';
+            } else {
+                document.getElementById('timer-bar').style.background = '#10b981';
+            }
+        }
+
+        function nextQuestion() {
+            const input = document.getElementById('answer-input');
+            const answer = input ? input.value.trim().toLowerCase() : "";
+            userAnswers.push(answer);
+            
+            currentIndex++;
+            loadQuestion();
+        }
+
+        function showFeedback() {
+            clearInterval(timerInterval);
+            document.getElementById('test-screen').classList.add('hidden');
+            const feedbackScreen = document.getElementById('feedback-screen');
+            feedbackScreen.classList.remove('hidden');
+
+            let score = 0;
+            const list = document.getElementById('results-list');
+            list.innerHTML = "";
+
+            questions.forEach((q, index) => {
+                const userAns = userAnswers[index] || "[No Answer]";
+                const isCorrect = userAns === q.answer.toLowerCase();
+                if (isCorrect) score++;
+
+                const item = document.createElement('div');
+                item.className = `p-4 border-l-4 ${isCorrect ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`;
+                item.innerHTML = `
+                    <p class="font-bold text-gray-800">Q${index + 1}: ${q.text.replace('[blank]', '____')}</p>
+                    <p class="text-sm mt-1">
+                        Your answer: <span class="${isCorrect ? 'text-green-700' : 'text-red-700'} font-bold">${userAns}</span> | 
+                        Correct answer: <span class="text-green-700 font-bold">${q.answer}</span>
+                    </p>
+                `;
+                list.appendChild(item);
+            });
+
+            document.getElementById('score-summary').innerText = `Your Final Score: ${score} / ${questions.length} (${Math.round(score/questions.length*100)}%)`;
+        }
+    </script>
+</body>
+</html>
